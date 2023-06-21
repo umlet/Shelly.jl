@@ -1,0 +1,24 @@
+
+
+export ls
+export ll
+
+
+# 'cd' already exists as function; dispatch of '42cd' works on its singletone type
+export °  # synonym for 'cd'
+export cc
+
+
+# cat already exists as function
+export head
+export tail
+export wc
+
+
+export df
+
+
+export ps1
+
+
+

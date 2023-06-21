@@ -1,0 +1,15 @@
+
+
+Base.show(io::IO, ::MIME"text/plain", x::AbstractShortcut) = _show(io, x)
+
+
+Base.:*(i::Int64, _::typeof(cd)) = ShortcutCd(i)
+Base.:!(i::Int64) = ShortcutCd(i)  # alternative
+
+
+Base.:*(i::Int64, _::typeof(cat)) = ShortcutFileOp(i, "cat")
+Base.:*(i::Int64, _::ShortcutHead) = ShortcutFileOp(i, "head")
+Base.:*(i::Int64, _::ShortcutTail) = ShortcutFileOp(i, "tail")
+Base.:*(i::Int64, _::ShortcutWc) = ShortcutFileOp(i, "wc")
+
+
