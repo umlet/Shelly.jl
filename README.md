@@ -6,6 +6,12 @@ Shelly provides a modeless and minimal-keystroke way of navigating the file syst
 
 Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and it overloads multiplication in what we humbly designate the *multiply and conquer* paradigm shift. Find out how it works below the examples.
 
+**Install with:**
+```
+pkg> add https://github.com/umlet/Shelly.jl.git
+julia> using Shelly
+```
+
 <br>
 <br>
 
