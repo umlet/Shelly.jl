@@ -234,14 +234,14 @@ const ls = ShortcutLs()
 struct ShortcutLl <: AbstractShortcut end
 atshow(_::ShortcutLl) = _ls(; long=true)
 const ll = ShortcutLl()
-# lsa
-struct ShortcutLsa <: AbstractShortcut end
-atshow(_::ShortcutLsa) = _ls(; show_hidden=true)
-const lsa = ShortcutLsa()
-# lla
-struct ShortcutLla <: AbstractShortcut end
-atshow(_::ShortcutLla) = _ls(; long=true, show_hidden=true)
-const lla = ShortcutLla()
+# # lsa
+# struct ShortcutLsa <: AbstractShortcut end
+# atshow(_::ShortcutLsa) = _ls(; show_hidden=true)
+# const lsa = ShortcutLsa()
+# # lla
+# struct ShortcutLla <: AbstractShortcut end
+# atshow(_::ShortcutLla) = _ls(; long=true, show_hidden=true)
+# const lla = ShortcutLla()
 
 
 # cd

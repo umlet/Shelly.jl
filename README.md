@@ -158,7 +158,6 @@ julia> -2cd
 * `0cd` goes to your home directory
 * `2cd` always means `cd ..`
 * ..but because we want a shortcut for that shortcut, you can use `cc` instead!
-* The shortcuts `lsa` and `lla` also display hidden files
 
 <br>
 <br>
