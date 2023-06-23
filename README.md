@@ -11,7 +11,7 @@ Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and
 pkg> add https://github.com/umlet/Shelly.jl.git
 julia> using Shelly
 ```
-
+*(If some of the exported names collide with your functions, just selectively `import` the ones you like.)*
 <br>
 <br>
 
@@ -158,7 +158,7 @@ julia> -2cd
 * `0cd` goes to your home directory
 * `2cd` always means `cd ..`
 * ..but because we want a shortcut for that shortcut, you can use `cc` instead!
-* If some of the exported names collide with your functions, selectively `import` the ones you like
+* The shortcuts `lsa` and `lla` also display hidden files
 
 <br>
 <br>

@@ -68,17 +68,27 @@ function lscolumns(ss::AbstractVector{<:AbstractString}; width::Int64=0, delim::
 end
 
 
-function _ls(; long=false, quiet=false, returnnames=false)
+function llline2name(s::AbstractString, lldotline::AbstractString)
+    !endswith(lldotline, " .")  &&  error("invalid reference ll-line")
+    offset = length(lldotline) - 1
+    RET = drop(s, offset) |> collect |> String
+    ss = split(RET, " -> ")  # symlink!
+    length(ss) == 2  &&  return ss[1]
+    return RET
+end
+
+
+function _ls(; long=false, show_hidden=false, quiet=false, returnnames=false)
     RET::Vector{String} = []
 
     #todo Windows..
     if long
-        s = read(`ls -a -l`, String)  
+        s = read(`ls -a -l --group-directories-first`, String)  
         ss0 = split(s, '\n')
         ss0[end] == ""  &&  pop!(ss0)
         startswith(ss0[1], "total ")  &&  popfirst!(ss0)
     else
-        s = read(`ls -a`, String)
+        s = read(`ls -a --group-directories-first`, String)
         ss0 = split(s, '\n')
         ss0[end] == ""  &&  pop!(ss0)
     end
@@ -86,20 +96,27 @@ function _ls(; long=false, quiet=false, returnnames=false)
     ss::Vector{String} = []
     if long
         ss1 = rpadmax(ss0)
-        for (i,(s, s_pad)) in enumerate(zip(ss0, ss1))
-            fname = split(s, ' ')[end]
-            push!(RET, fname)
+        i = 1
+        for (s, s_pad) in zip(ss0, ss1)
+            name = llline2name(s, ss0[1])
+            !show_hidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
 
-            s_typeind = isdir(fname)  ?  "cd"  :  ""
+            push!(RET, name)
+
+            s_typeind = isdir(name)  ?  "cd"  :  ""
             push!(ss, "$(s_pad)   $(i)$(s_typeind)")
+            i += 1
         end
     else
-        for (i,s) in enumerate(ss0)
-            fname = s
-            push!(RET, s)
+        i = 1
+        for name in ss0
+            !show_hidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
 
-            s_typeind = isdir(s)  ?  "°"  :  " "
-            push!(ss, "$(string(i))$(s_typeind) $(s)")
+            push!(RET, name)
+
+            s_typeind = isdir(name)  ?  "°"  :  " "
+            push!(ss, "$(string(i))$(s_typeind) $(name)")
+            i += 1
         end
         ss = lscolumns(ss)
     end
@@ -217,6 +234,14 @@ const ls = ShortcutLs()
 struct ShortcutLl <: AbstractShortcut end
 atshow(_::ShortcutLl) = _ls(; long=true)
 const ll = ShortcutLl()
+# lsa
+struct ShortcutLsa <: AbstractShortcut end
+atshow(_::ShortcutLsa) = _ls(; show_hidden=true)
+const lsa = ShortcutLsa()
+# lla
+struct ShortcutLla <: AbstractShortcut end
+atshow(_::ShortcutLla) = _ls(; long=true, show_hidden=true)
+const lla = ShortcutLla()
 
 
 # cd
