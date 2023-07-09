@@ -69,7 +69,7 @@ end
 
 
 function llline2name(s::AbstractString, lldotline::AbstractString)
-    !endswith(lldotline, " .")  &&  error("invalid reference ll-line")
+    !endswith(lldotline, " .")  &&  error("invalid reference ll-line: '$(lldotline)'")
     offset = length(lldotline) - 1
     RET = drop(s, offset) |> collect |> String
     ss = split(RET, " -> ")  # symlink!
@@ -77,11 +77,39 @@ function llline2name(s::AbstractString, lldotline::AbstractString)
     return RET
 end
 
+function _ls_win(; showhidden::Bool=false, quiet::Bool=false, returnnames::Bool=false)
+    RET::Vector{String} = []
+    s = read(`cmd /c dir`, String)
+    ss0 = split(s, "\r\n")
+    ss0[end] == ""  &&  pop!(ss0)
 
-function _ls(; long=false, show_hidden=false, quiet=false, returnnames=false)
+    ss0 = ss0[6:end-2]
+
+    ss::Vector{String} = []
+    ss1 = rpadmax(ss0)
+    i = 1
+    for (s, s_pad) in zip(ss0, ss1)
+        name = llline2name(s, ss0[1])
+        !showhidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
+
+        push!(RET, name)
+
+        s_typeind = isdir(name)  ?  "cd"  :  ""
+        push!(ss, "$(s_pad)   $(i)$(s_typeind)")
+        i += 1
+    end
+
+    !quiet  &&  foreach(println, ss)
+
+    returnnames  &&  return RET
+    return nothing    
+end
+
+function _ls(; long::Bool=false, showhidden::Bool=false, quiet::Bool=false, returnnames::Bool=false)
+    Sys.iswindows()  &&  return _ls_win(; quiet=quiet, returnnames=returnnames)
+
     RET::Vector{String} = []
 
-    #todo Windows..
     if long
         s = read(`ls -a -l --group-directories-first`, String)  
         ss0 = split(s, '\n')
@@ -99,7 +127,7 @@ function _ls(; long=false, show_hidden=false, quiet=false, returnnames=false)
         i = 1
         for (s, s_pad) in zip(ss0, ss1)
             name = llline2name(s, ss0[1])
-            !show_hidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
+            !showhidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
 
             push!(RET, name)
 
@@ -110,7 +138,7 @@ function _ls(; long=false, show_hidden=false, quiet=false, returnnames=false)
     else
         i = 1
         for name in ss0
-            !show_hidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
+            !showhidden  &&  name != "."  &&  name != ".."  &&  startswith(name, ".")  &&  continue
 
             push!(RET, name)
 
@@ -234,13 +262,15 @@ const ls = ShortcutLs()
 struct ShortcutLl <: AbstractShortcut end
 atshow(_::ShortcutLl) = _ls(; long=true)
 const ll = ShortcutLl()
+
+const dir = ll
 # # lsa
 # struct ShortcutLsa <: AbstractShortcut end
-# atshow(_::ShortcutLsa) = _ls(; show_hidden=true)
+# atshow(_::ShortcutLsa) = _ls(; showhidden=true)
 # const lsa = ShortcutLsa()
 # # lla
 # struct ShortcutLla <: AbstractShortcut end
-# atshow(_::ShortcutLla) = _ls(; long=true, show_hidden=true)
+# atshow(_::ShortcutLla) = _ls(; long=true, showhidden=true)
 # const lla = ShortcutLla()
 
 
@@ -279,5 +309,6 @@ const df = ShortcutDf()
 
 include("Shelly.jl_base")
 include("Shelly.jl_exports")
+include("Shelly.jl_docs")
 end
 

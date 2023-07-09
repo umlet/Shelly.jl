@@ -1,8 +1,8 @@
-# Shelly.jl: `cd`, `ls` and `ll` in Julia
+# Shelly.jl: `cd`, `ls`, and `ll` in the Julia REPL Mode (and `dir` on Windows!)
 
 Julia's REPL and its modes are superb. They also offer a variety of ways to interact with the underlying file system--the `cd("somedir")` function, a full-blown shell mode, macro capabilities, etc. Yet all involve just a *tiny* bit more typing of (often shifted) chars, or a mode switch.
 
-Shelly provides a modeless and minimal-keystroke way of navigating the file system with `cd`, `ls`, and `ll`, along with some additional Unix shortcuts.
+Shelly provides a modeless and minimal-keystroke way of navigating the file system with `cd`, `ls`, and `ll` (and `dir` on Windows). On Linux, some additional Unix shortcuts are available.
 
 Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and it overloads multiplication in what we humbly designate the *multiply and conquer* paradigm shift. Find out how it works below the examples.
 
@@ -11,17 +11,18 @@ Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and
 pkg> add https://github.com/umlet/Shelly.jl.git
 julia> using Shelly
 ```
-*To avoid name collisions, maybe just selectively `import` the ones you like:*
+*Or, to avoid name collisions, maybe just selectively `import` the ones you like (e.g., if the name `df` is likely to clash with your differential equations code):*
 ```
 julia> import Shelly: ll, ls
 ```
+*Note: There is no need to import `cd` -- learn why below.*
 <br>
 <br>
 
 
 
 
-### Example: `ll`, `cd` and `ls`
+### Example: `ll`/`ls` and `cd`
 
 Say our current directory is the "Shelly.jl" one:
 
@@ -38,7 +39,7 @@ drwxr-xr-x  2 martin martin 4096 Jul  1 12:29 src            3cd
 -rw-r--r--  1 martin martin 5496 Jul  1 12:29 README.md      6
 ```
 
-We can now, still in the Julia REPL mode, change the current dir to `src`:
+We can now, still in the Julia REPL mode, change the current dir to `src` via its index from the `ll` command:
 
 ```
 julia> 3cd
@@ -55,7 +56,8 @@ drwxr-xr-x 2 martin martin 4096 Jul  1 12:29 .                   1cd
 drwxr-xr-x 4 martin martin 4096 Jul  1 12:29 ..                  2cd
 -rw-r--r-- 1 martin martin 7488 Jul  1 12:29 Shelly.jl           3
 -rw-r--r-- 1 martin martin  426 Jul  1 12:29 Shelly.jl_base      4
--rw-r--r-- 1 martin martin  265 Jul  1 12:29 Shelly.jl_exports   5
+-rw-r--r-- 1 martin martin  502 Jul  9 12:50 Shelly.jl_docs      5
+-rw-r--r-- 1 martin martin  265 Jul  1 12:29 Shelly.jl_exports   6
 ```
 
 And now move back up:
@@ -111,13 +113,34 @@ julia> !2   # is same as '2cd' or '2°'
 <br>
 
 
+### Example: `dir` on Windows
+
+```
+julia> dir
+09-Jul-23  11:44 AM    <DIR>          .              1cd
+09-Jul-23  11:44 AM    <DIR>          ..             2cd
+09-Jul-23  11:40 AM             1,062 LICENSE        3
+09-Jul-23  11:44 AM               138 Project.toml   4
+09-Jul-23  11:44 AM             5,870 README.md      5
+09-Jul-23  12:12 PM    <DIR>          src            6cd
+
+julia> 6cd
+
+julia> pwd()
+"C:\\work\\Shelly.jl\\src"
+```
+
+(`ls` and `ll` default to `dir`'s behavior on Linux.)
+
+<br>
+<br>
 
 
-### Example: `cat`, `head`, `tail`, `wc`
+### Example: `cat`, `head`, `tail`, `wc` (Linux-only)
 
 ```
 julia> ls
-1° .  2° ..  3  Shelly.jl  4  Shelly.jl_base  5  Shelly.jl_exports
+1° .  2° ..  3  Shelly.jl  4  Shelly.jl_base  5  Shelly.jl_docs  6  Shelly.jl_exports
 
 julia> 3cat
 module Shelly
@@ -141,7 +164,7 @@ julia> 3wc
 
 
 
-### Example: `df`
+### Example: `df` (Linux-only)
 
 We can show our mounts with the usual `df`:
 ```
@@ -226,6 +249,23 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 <br>
 <br>
 
+
+
+
+## Change History
+
+0.8 `dir` on Windows; exports; docstring
+
+0.7 Doc update, dirs listed first on Linux
+
+0.6 Initial version
+
+<br>
+<br>
+
+
+
+
 ## TODOs
-Windows support; code cleanup; more commands?; docstrings; register..
+More Windows support; code cleanup; more commands (`pwd`)?; register..
 
