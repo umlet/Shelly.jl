@@ -11,7 +11,10 @@ Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and
 pkg> add https://github.com/umlet/Shelly.jl.git
 julia> using Shelly
 ```
-*(If some of the exported names collide with your functions, just selectively `import` the ones you like.)*
+*To avoid name collisions, maybe just selectively `import` the ones you like:*
+```
+julia> import Shelly: ll, ls
+```
 <br>
 <br>
 
@@ -27,18 +30,20 @@ Say our current directory is the "Shelly.jl" one:
 #       - the output of 'll' here is written directly to the console
 
 julia> ll
-drwxr-xr-x 3 martin martin 4096 Jun 20 17:28 .           1cd
-drwxr-xr-x 6 martin martin 4096 Jun 20 11:01 ..          2cd
--rw-r--r-- 1 martin martin  753 Jun 20 17:08 README.md   3
-drwxr-xr-x 2 martin martin 4096 Jun 20 17:28 src         4cd
+drwxr-xr-x  4 martin martin 4096 Jul  1 12:29 .              1cd
+drwxr-xr-x 10 martin martin 4096 Jul  1 12:29 ..             2cd
+drwxr-xr-x  2 martin martin 4096 Jul  1 12:29 src            3cd
+-rw-r--r--  1 martin martin 1062 Jul  1 12:29 LICENSE        4
+-rw-r--r--  1 martin martin  138 Jul  9 11:22 Project.toml   5
+-rw-r--r--  1 martin martin 5496 Jul  1 12:29 README.md      6
 ```
 
 We can now, still in the Julia REPL mode, change the current dir to `src`:
 
 ```
-julia> 4cd
+julia> 3cd
 
-julia> pwd()
+julia> pwd()                   # the standard Julia function shows:
 "/home/martin/Shelly.jl/src"   # we have indeed moved!
 ```
 
@@ -46,11 +51,11 @@ Let's look around here:
 
 ```
 julia> ll
-drwxr-xr-x 2 martin martin 4096 Jun 20 17:28 .                   1cd
-drwxr-xr-x 3 martin martin 4096 Jun 20 17:28 ..                  2cd
--rw-r--r-- 1 martin martin 4861 Jun 20 17:45 shelly.jl           3
--rw-r--r-- 1 martin martin  227 Jun 20 16:23 shelly.jl_base      4
--rw-r--r-- 1 martin martin  132 Jun 20 17:09 shelly.jl_exports   5
+drwxr-xr-x 2 martin martin 4096 Jul  1 12:29 .                   1cd
+drwxr-xr-x 4 martin martin 4096 Jul  1 12:29 ..                  2cd
+-rw-r--r-- 1 martin martin 7488 Jul  1 12:29 Shelly.jl           3
+-rw-r--r-- 1 martin martin  426 Jul  1 12:29 Shelly.jl_base      4
+-rw-r--r-- 1 martin martin  265 Jul  1 12:29 Shelly.jl_exports   5
 ```
 
 And now move back up:
@@ -59,10 +64,12 @@ And now move back up:
 julia> 2cd
 
 julia> ll
-drwxr-xr-x 3 martin martin 4096 Jun 20 17:28 .           1cd
-drwxr-xr-x 6 martin martin 4096 Jun 20 11:01 ..          2cd
--rw-r--r-- 1 martin martin  753 Jun 20 17:08 README.md   3
-drwxr-xr-x 2 martin martin 4096 Jun 20 17:28 src         4cd
+drwxr-xr-x  4 martin martin 4096 Jul  1 12:29 .              1cd
+drwxr-xr-x 10 martin martin 4096 Jul  1 12:29 ..             2cd
+drwxr-xr-x  2 martin martin 4096 Jul  1 12:29 src            3cd
+-rw-r--r--  1 martin martin 1062 Jul  1 12:29 LICENSE        4
+-rw-r--r--  1 martin martin  138 Jul  9 11:22 Project.toml   5
+-rw-r--r--  1 martin martin 5693 Jul  9 11:25 README.md      6
 ```
 
 <br>
@@ -72,9 +79,9 @@ The same works with `ls`. To save space and be lighter on the eye, a `°`-suffix
 
 ```
 julia> ls
-1° .  2° ..  3  README.md  4° src
+1° .  2° ..  3° src  4  LICENSE  5  Project.toml  6  README.md
 
-julia> 4cd
+julia> 3cd
 julia> pwd()
 "/home/martin/Shelly.jl/src"
 
@@ -82,7 +89,7 @@ julia> 2cd
 julia> pwd()
 "/home/martin/Shelly.jl"
 
-julia> 4°
+julia> 3°
 julia> pwd()
 "/home/martin/Shelly.jl/src"
 
@@ -110,7 +117,7 @@ julia> !2   # is same as '2cd' or '2°'
 
 ```
 julia> ls
-1° .  2° ..  3  shelly.jl  4  shelly.jl_base  5  shelly.jl_exports
+1° .  2° ..  3  Shelly.jl  4  Shelly.jl_base  5  Shelly.jl_exports
 
 julia> 3cat
 module Shelly
@@ -143,7 +150,7 @@ julia> df
 tmpfs             6448660          0   6448660   0% /mnt/wsl               -2cd
 tools           498750460  172976384 325774076  35% /init                  -3cd
 ```
-To `cd` to a mount, use negative indizes:
+To `cd` to a mount, use negative indices:
 ```
 julia> -2cd
 ```
@@ -156,14 +163,13 @@ julia> -2cd
 
 * You don't have to use `ls` before running a `cd` shortcut, especially if you remember the index
 * `0cd` goes to your home directory
-* `2cd` always means `cd ..`
-* ..but because we want a shortcut for that shortcut, you can use `cc` instead!
+* `2cd` always means `cd ..` -- but because we want a shortcut for that shortcut, you can use `cc` instead!
 
 <br>
 <br>
 
 
-### And One More Hint: `ps1`
+### One more thing: `ps1`
 
 As you'll gallivant around your file system more promiscuously now, you might want to tune the REPL prompt:
 
@@ -179,7 +185,7 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 ## How Does it Work?
 
-*   Shortcuts like `ls` and `ll` are simple--they are just values:
+*   Shortcuts like `ls` and `ll` are simple -- they are just values:
     ```
     struct ShortcutLs <: AbstractShortcut end
 

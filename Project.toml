@@ -1,7 +1,7 @@
 name = "Shelly"
 uuid = "d5c2ffab-b4e7-4ef6-aef9-6ba302e36d3e"
 authors = ["martin@umlet.com>"]
-version = "0.6.1"
+version = "0.7.0"
 
 [compat]
 julia = "1.9.0"
