@@ -7,7 +7,7 @@
 <br>
 <br>
 
-**Surf your file system on Windows:**
+**Dash through your file system on Windows:**
 
 ![Windows screenshot](pics/Shelly_screenshot_Windows.png)
 
