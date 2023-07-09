@@ -1,5 +1,21 @@
 # Shelly.jl: `cd`, `ls`, and `ll` in the Julia REPL Mode (and `dir` on Windows!)
 
+**Surf your file system on Linux:**
+
+![Linux screenshot](pics/Shelly_screenshot_Linux.png)
+
+<br>
+<br>
+
+**Surf your file system on Windows:**
+
+![Windows screenshot](pics/Shelly_screenshot_Windows.png)
+
+<br>
+<br>
+<br>
+<br>
+
 Julia's REPL and its modes are superb. They also offer a variety of ways to interact with the underlying file system--the `cd("somedir")` function, a full-blown shell mode, macro capabilities, etc. Yet all involve just a *tiny* bit more typing of (often shifted) chars, or a mode switch.
 
 Shelly provides a modeless and minimal-keystroke way of navigating the file system with `cd`, `ls`, and `ll` (and `dir` on Windows). On Linux, some additional Unix shortcuts are available.
@@ -18,9 +34,11 @@ julia> import Shelly: ll, ls
 *Note: There is no need to import `cd` -- learn why below.*
 <br>
 <br>
+<br>
+<br>
 
 
-
+## Usage
 
 ### Example: `ll`/`ls` and `cd`
 
