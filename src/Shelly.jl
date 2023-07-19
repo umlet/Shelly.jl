@@ -111,12 +111,20 @@ function _ls(; long::Bool=false, showhidden::Bool=false, quiet::Bool=false, retu
     RET::Vector{String} = []
 
     if long
-        s = read(`ls -a -l --group-directories-first`, String)  
+        if !Sys.isapple()
+            s = read(`ls -a -l --group-directories-first`, String)
+        else
+            s = read(`ls -a -l`, String)
+        end
         ss0 = split(s, '\n')
         ss0[end] == ""  &&  pop!(ss0)
         startswith(ss0[1], "total ")  &&  popfirst!(ss0)
     else
-        s = read(`ls -a --group-directories-first`, String)
+        if !Sys.isapple()
+            s = read(`ls -a --group-directories-first`, String)
+        else
+            s = read(`ls -a`, String)
+        end
         ss0 = split(s, '\n')
         ss0[end] == ""  &&  pop!(ss0)
     end
