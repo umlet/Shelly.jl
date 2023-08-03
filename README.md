@@ -184,7 +184,7 @@ julia> 3wc
 
 ### Example: `ldf` (Linux-only)
 
-We can show our mounts with  `ldf` (`df` is also available, but not exported, as it can easily clash a DataFrame variable):
+We can show our mounts with  `ldf` (`df` is also available, but not exported, as it can easily clash with some DataFrame variable):
 ```
 julia> ldf
 /dev/sdb        263174212    8247948 241488108   4% /                      -1cd
