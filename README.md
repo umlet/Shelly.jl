@@ -274,7 +274,7 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 0.8 `df` -> `ldf`
 
-0.7 Doc update; dirs listed first on Linux; `dir` on Windows; exports; docstring
+0.7 Doc update; dirs listed first on Linux; `dir` on Windows; exports; docstring; macOS fix
 
 0.6 Initial version
 
@@ -285,5 +285,5 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 
 ## TODOs
-More Windows support; code cleanup; more commands (`pwd`)?; register..
+More Windows support (`wmic`); code cleanup; more commands (`pwd`?); `ls -a`..
 
