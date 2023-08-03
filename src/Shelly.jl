@@ -306,6 +306,7 @@ const wc = ShortcutWc()
 # df
 struct ShortcutDf <: AbstractShortcut end
 atshow(_::ShortcutDf) = _df()
+const ldf = ShortcutDf()
 const df = ShortcutDf()
 
 

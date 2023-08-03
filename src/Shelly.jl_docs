@@ -8,6 +8,6 @@
 
 `cd`, preceded by a number shown in the `ll`-ouput, changes dir, for example `4cd`. The second entry of `ll` is always the parent dir "..", so `2cd` moves one dir up (`cc` does the same). `0cd` goes to your home dir.
 
-Linux-only for now: `df` shows mounts; their negative indices can be used with `cd`, as in `-4cd`.
+Linux-only for now: `ldf` shows mounts; their negative indices can be used with `cd`, as in `-4cd`.
 """
-:ll, :ls, :dir, :df, :Shelly
+:ll, :ls, :dir, :ldf, :Shelly

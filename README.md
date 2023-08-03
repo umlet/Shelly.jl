@@ -20,14 +20,14 @@ Julia's REPL and its modes are superb. They also offer a variety of ways to inte
 
 Shelly provides a modeless and minimal-keystroke way of navigating the file system with `cd`, `ls`, and `ll` (and `dir` on Windows). On Linux, some additional Unix shortcuts are available.
 
-Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and it overloads multiplication in what we humbly designate the *multiply and conquer* paradigm shift. Find out how it works below the examples.
+Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and it overloads a special-case multiplication (*multiply and conquer*, if you will). Find out how it works below the examples.
 
 **Install with:**
 ```
-pkg> add https://github.com/umlet/Shelly.jl.git
+pkg> add Shelly
 julia> using Shelly
 ```
-*Or, to avoid name collisions, maybe just selectively `import` the ones you like (e.g., if the name `df` is likely to clash with your differential equations code):*
+*Or, to avoid name collisions, maybe just selectively `import` the ones you like:*
 ```
 julia> import Shelly: ll, ls
 ```
@@ -182,11 +182,11 @@ julia> 3wc
 
 
 
-### Example: `df` (Linux-only)
+### Example: `ldf` (Linux-only)
 
-We can show our mounts with the usual `df`:
+We can show our mounts with  `ldf` (`df` is also available, but not exported, as it can easily clash a DataFrame variable):
 ```
-julia> df
+julia> ldf
 /dev/sdb        263174212    8247948 241488108   4% /                      -1cd
 tmpfs             6448660          0   6448660   0% /mnt/wsl               -2cd
 tools           498750460  172976384 325774076  35% /init                  -3cd
@@ -272,9 +272,9 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 ## Change History
 
-0.8 `dir` on Windows; exports; docstring
+0.8 `df` -> `ldf`
 
-0.7 Doc update, dirs listed first on Linux
+0.7 Doc update; dirs listed first on Linux; `dir` on Windows; exports; docstring
 
 0.6 Initial version
 

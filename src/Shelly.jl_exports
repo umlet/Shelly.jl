@@ -24,7 +24,7 @@ if Sys.islinux()
     export wc
 
 
-    export df
+    export ldf
 end
 
 
