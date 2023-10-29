@@ -12,19 +12,20 @@ end
 #export lla
 
 
-# 'cd' already exists as function; dispatch of '42cd' works on its singletone type
+#noexport cd -- already exists as function; dispatch of '42cd' works on its singletone type
 export °  # synonym for 'cd'
 export cc
 
 
-if Sys.islinux()
-    # cat already exists as function
+if !Sys.iswindows()
+    #noexport cat -- already exists as function; no need to export!
     export head
     export tail
     export wc
 
 
     export ldf
+    #noexport df
 end
 
 

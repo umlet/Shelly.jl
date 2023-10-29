@@ -23,15 +23,17 @@ Shelly provides a modeless and minimal-keystroke way of navigating the file syst
 Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and it overloads a special-case multiplication (*multiply and conquer*, if you will). Find out how it works below the examples.
 
 **Install with:**
-```
+```julia
 pkg> add Shelly
 julia> using Shelly
 ```
 *Or, to avoid name collisions, maybe just selectively `import` the ones you like:*
+```julia
+julia> import Shelly: ll, ls, ldf, head, tail, wc, ps1, cc, °   # or any subset
 ```
-julia> import Shelly: ll, ls
-```
-*Note: There is no need to import `cd` -- learn why below.*
+In particular, `ls` might clash with [FileJockey.jl](https://github.com/umlet/FileJockey.jl)'s `ls()` function. But you can always create your own shortcut to it with `myls = Shelly.ls`.
+
+*Note: There is no need to import `cd` or `cat` -- learn why below.*
 <br>
 <br>
 <br>
@@ -148,13 +150,13 @@ julia> pwd()
 "C:\\work\\Shelly.jl\\src"
 ```
 
-(`ls` and `ll` default to `dir`'s behavior on Linux.)
+(`ls` and `ll` default to `dir`'s behavior on Windows.)
 
 <br>
 <br>
 
 
-### Example: `cat`, `head`, `tail`, `wc` (Linux-only)
+### Example: `cat`, `head`, `tail`, `wc` (Linux-/macOS-only)
 
 ```
 julia> ls
@@ -182,7 +184,7 @@ julia> 3wc
 
 
 
-### Example: `ldf` (Linux-only)
+### Example: `ldf` (Linux-/macOS-only)
 
 We can show our mounts with  `ldf` (`df` is also available, but not exported, as it can easily clash with some DataFrame variable):
 ```
@@ -272,6 +274,8 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 ## Change History
 
+0.8.1 export `ldf` on Mac; minor doc update
+
 0.8 `df` -> `ldf`
 
 0.7 Doc update; dirs listed first on Linux; `dir` on Windows; exports; docstring; macOS fix
@@ -285,5 +289,5 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 
 ## TODOs
-More Windows support (`wmic`); code cleanup; more commands (`pwd`?); `ls -a`..
+More Windows support (`wmic`); code cleanup; more commands (`pwd`?); `ls -a` via CONF; fix Windows issue if traversing up root; `setprompt` doc; ...
 
