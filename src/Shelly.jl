@@ -77,7 +77,15 @@ function llline2name(s::AbstractString, lldotline::AbstractString)
     return RET
 end
 
+mutable struct GlobalBoolState
+    state::Bool
+end
+(gbs::GlobalBoolState)(b::Bool) = gbs.state = b
+(gbs::GlobalBoolState)() = gbs.state
+const lastShowHidden = GlobalBoolState(false)
+
 function _ls_win(; showhidden::Bool=false, quiet::Bool=false, returnnames::Bool=false)
+    lastShowHidden(showhidden)
     RET::Vector{String} = []
     s = read(`cmd /c dir`, String)
     ss0 = split(s, "\r\n")
@@ -106,8 +114,8 @@ function _ls_win(; showhidden::Bool=false, quiet::Bool=false, returnnames::Bool=
 end
 
 function _ls(; long::Bool=false, showhidden::Bool=false, quiet::Bool=false, returnnames::Bool=false)
-    Sys.iswindows()  &&  return _ls_win(; quiet=quiet, returnnames=returnnames)
-
+    Sys.iswindows()  &&  return _ls_win(; showhidden=showhidden, quiet=quiet, returnnames=returnnames)
+    lastShowHidden(showhidden)
     RET::Vector{String} = []
 
     if long
@@ -207,7 +215,7 @@ function toname(i::Int64; must_be_file=false, must_be_dir=false)
 
 
     # current dir
-    names = _ls(quiet=true, returnnames=true)
+    names = _ls(showhidden=lastShowHidden(), quiet=true, returnnames=true)
     if i > length(names)
         println(stderr, "ERROR: $(i): No such file system index; run 'll'")
         return nothing
@@ -272,14 +280,14 @@ atshow(_::ShortcutLl) = _ls(; long=true)
 const ll = ShortcutLl()
 
 const dir = ll
-# # lsa
-# struct ShortcutLsa <: AbstractShortcut end
-# atshow(_::ShortcutLsa) = _ls(; showhidden=true)
-# const lsa = ShortcutLsa()
-# # lla
-# struct ShortcutLla <: AbstractShortcut end
-# atshow(_::ShortcutLla) = _ls(; long=true, showhidden=true)
-# const lla = ShortcutLla()
+# lsa
+struct ShortcutLsa <: AbstractShortcut end
+atshow(_::ShortcutLsa) = _ls(; showhidden=true)
+const lsa = ShortcutLsa()
+# lla
+struct ShortcutLla <: AbstractShortcut end
+atshow(_::ShortcutLla) = _ls(; long=true, showhidden=true)
+const lla = ShortcutLla()
 
 
 # cd
