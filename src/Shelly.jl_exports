@@ -8,8 +8,8 @@ export ll
 if Sys.iswindows()
     export dir
 end
-#export lsa
-#export lla
+export lsa
+export lla
 
 
 #noexport cd -- already exists as function; dispatch of '42cd' works on its singletone type
