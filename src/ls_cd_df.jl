@@ -28,6 +28,12 @@ function line2name(s::AbstractString, offset::Int64, _::Union{Linux, MacOS})
     length(ss) == 2  &&  return ss[1]
     return RET    
 end
+function line2name(s::AbstractString, offset::Int64, _::Windows)
+    RET = drop(s, offset) |> collect |> String
+    ss = split(RET, " [")  # dir /a..
+    length(ss) == 2  &&  return ss[1]
+    return RET    
+end
 
 # On Linuxy systems, we want '.' and '..' entries; we remove other hidden files ourselves
 listfilecmd(          _::Bool, _::Linux)   = `ls -l -a --group-directories-first`
@@ -45,6 +51,16 @@ function _llraw(showhidden::Bool, os::Union{Linux, MacOS})
     startswith(ss[1], "total ")  &&  popfirst!(ss)
     return ss
 end
+function _llraw(showhidden::Bool, os::Windows)
+    cmd = listfilecmd(showhidden, os)
+    s = read(cmd, String)
+    ss = split(s, "\r\n")
+    ss[end] == ""  &&  pop!(ss)
+
+    # prefix of 5, suffix of 2 lines expected
+    length(ss) < 7  &&  error("unexpected 'dir' result; too few entries")
+    return ss[6:end-2]
+end
 
 function listfiles(showhidden::Bool, os::Union{Linux, MacOS})
     lines_raw_long = _llraw(true, os)
@@ -61,9 +77,19 @@ function listfiles(showhidden::Bool, os::Union{Linux, MacOS})
     end
 
     outs_long  = [ (isdir(name) ? "$(s)   $(i)cd" : "$(s)   $(i)")    for (s, name, i) in zip(rpadmax(lines_raw_long), names, countfrom(1)) ]
-
     outs_short = [ (isdir(name) ? "$(i)° $(name)" : "$(i)  $(name)")  for    (name, i) in zip(                         names, countfrom(1)) ]
+    return ListfilesStruct(lines_raw_long, names, outs_long, outs_short)
+end
+function listfiles(showhidden::Bool, os::Windows)
+    lines_raw_long = _llraw(showhidden, os)
 
+    names = let
+        i = getoffset_line2name(lines_raw_long[1])
+        [ line2name(s, i, os) for s in lines_raw_long ]
+    end
+
+    outs_long  = [ (isdir(name) ? "$(s)   $(i)cd" : "$(s)   $(i)")    for (s, name, i) in zip(rpadmax(lines_raw_long), names, countfrom(1)) ]
+    outs_short = [ (isdir(name) ? "$(i)° $(name)" : "$(i)  $(name)")  for    (name, i) in zip(                         names, countfrom(1)) ]
     return ListfilesStruct(lines_raw_long, names, outs_long, outs_short)
 end
 
