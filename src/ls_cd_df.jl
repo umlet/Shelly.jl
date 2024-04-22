@@ -139,7 +139,9 @@ function listmounts(_::Windows)
     lines_raw = String[]
     for c in 'A':'Z'
         drive = c * ':'
-        isdir(drive)  &&  push!(lines_raw, drive)
+        ok = try  isdir(drive)  catch;  false  end  # some internal drive letters crazily throw exception
+        !ok  &&  continue
+        push!(lines_raw, drive)
     end
     outs = [ "$(s)   $(-i)cd" for (s,i) in zip(lines_raw, countfrom(1)) ]
     return ListmountsStruct(lines_raw, lines_raw, outs)
