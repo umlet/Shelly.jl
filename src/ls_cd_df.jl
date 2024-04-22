@@ -138,8 +138,8 @@ end
 function listmounts(_::Windows)
     lines_raw = String[]
     for c in 'A':'Z'
-        name = c * ':'
-        isdir(name)  &&  push!(names, lines_raw)
+        drive = c * ':'
+        isdir(drive)  &&  push!(lines_raw, drive)
     end
     outs = [ "$(s)   $(-i)cd" for (s,i) in zip(lines_raw, countfrom(1)) ]
     return ListmountsStruct(lines_raw, lines_raw, outs)
