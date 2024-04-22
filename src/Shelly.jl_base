@@ -13,3 +13,9 @@ Base.:*(i::Int64, _::ShortcutTail) = ShortcutFileOp(i, "tail")
 Base.:*(i::Int64, _::ShortcutWc) = ShortcutFileOp(i, "wc")
 
 
+Base.:|>(x::ShortcutLs,  f) = f(listfiles(false).names)
+Base.:|>(x::ShortcutLsa, f) = f( listfiles(true).names)
+
+Base.:|>(x::ShortcutLl,  f) = f(listfiles(false).lines_raw_long)
+Base.:|>(x::ShortcutLla, f) = f( listfiles(true).lines_raw_long)
+

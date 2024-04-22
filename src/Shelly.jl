@@ -1,6 +1,6 @@
 module Shelly
 
-using Base.Iterators
+using Base.Iterators: drop, countfrom, partition
 
 abstract type TraitOS end
 struct Linux <: TraitOS end
@@ -15,11 +15,11 @@ include("ls_cd_df.jl")
 
 ################################################################################
 # prompt
+prompt_dir_julia() = "$(basename(pwd()))/::julia> "
 function setprompt(f::Function=prompt_dir_julia)
-    Base.active_repl.interface.modes[1].prompt = prompt_dir_julia  #() -> "$(basename(pwd()))/::julia> "
+    Base.active_repl.interface.modes[1].prompt = f
     return nothing
 end
-prompt_dir_julia() = "$(basename(pwd()))/::julia> "
 
 
 ################################################################################
@@ -105,8 +105,8 @@ const wc = ShortcutWc()
 
 # df
 struct ShortcutDf <: AbstractShortcut end
-const ldf = ShortcutDf()
 const df = ShortcutDf()
+const ldf = ShortcutDf()  # less likely to name-clash
 atshow(_::ShortcutDf) = printlistmounts()
 
 
@@ -116,5 +116,16 @@ atshow(_::ShortcutDf) = printlistmounts()
 include("Shelly.jl_base")
 include("Shelly.jl_exports")
 include("Shelly.jl_docs")
-end
+end # module
 
+
+#=
+TODO:
+- OS-ify listmount
+- README & version
+- top level dir on Windows does not return ".." entry
+- Windows drive letters -- use isdir insteal of deprecated wmic
+- let strings escape via pipe op (also for df?)
+- copmplete help; ps1..
+- explicit iter imports [DONE]
+=#

@@ -9,6 +9,7 @@ export ll
 export lla
 if Sys.iswindows()
     export dir
+    export dira  # TODO: Windows 'dir' sometimes omits . and .. entries (?)
 end
 
 

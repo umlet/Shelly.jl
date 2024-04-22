@@ -36,8 +36,8 @@ function line2name(s::AbstractString, offset::Int64, _::Windows)
 end
 
 # On Linuxy systems, we want '.' and '..' entries; we remove other hidden files ourselves
-listfilecmd(          _::Bool, _::Linux)   = `ls -l -a --group-directories-first`
-listfilecmd(          _::Bool, _::MacOS)   = `ls -l -a`
+listfilecmd(         _::Bool, _::Linux)   = `ls -l -a --group-directories-first`
+listfilecmd(         _::Bool, _::MacOS)   = `ls -l -a`
 listfilecmd(showhidden::Bool, _::Windows) = showhidden  ?  `cmd /c dir /a`  :  `cmd /c dir`
 
 function _llraw(showhidden::Bool, os::Union{Linux, MacOS})
@@ -118,7 +118,7 @@ struct ListmountsStruct
     outs::Vector{String}
 end
 
-function listmounts()
+function listmounts(_::Union{Linux, MacOS})
     lines_raw = let
         s = read(`df`, String)  
         ss = split(s, '\n')
@@ -135,7 +135,16 @@ function listmounts()
 
     return ListmountsStruct(lines_raw, names, outs)
 end
-
+function listmounts(_::Windows)
+    lines_raw = String[]
+    for c in 'A':'Z'
+        name = c * ':'
+        isdir(name)  &&  push!(names, lines_raw)
+    end
+    outs = [ "$(s)   $(-i)cd" for (s,i) in zip(lines_raw, countfrom(1)) ]
+    return ListmountsStruct(lines_raw, lines_raw, outs)
+end
+listmounts() = listmounts(OS)
 function printlistmounts()
     S = listmounts()
     foreach(println, S.outs)
