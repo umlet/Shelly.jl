@@ -70,8 +70,8 @@ function _llraw(showhidden::Bool, os::Windows)
         println("YYYYYYYYYYYYY")
         s = read(`cmd /c dir $(homedir())`, String)
         ss = split(s, "\r\n")
-        push!(RET, ss[6])
-        push!(RET, ss[7])
+        pushfirst!(RET, ss[7])
+        pushfirst!(RET, ss[6])
     end
     return RET
 end
