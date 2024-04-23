@@ -65,7 +65,7 @@ function _llraw(showhidden::Bool, os::Windows)
 
     # special cases: root dir & seemingly odd/'.'-less folder output
     # get '.' and '..' lines from homedir
-    if length(RET) == 0  ||  !endswith(ss[RET], " .")
+    if length(RET) == 0  ||  !endswith(RET[1], " .")
         s = read(`cmd /c dir $(homedir())`, String)
         ss = split(s, "\r\n")
         push!(RET, ss[6])
