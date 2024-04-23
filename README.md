@@ -150,7 +150,7 @@ julia> pwd()
 "C:\\work\\Shelly.jl\\src"
 ```
 
-(`ls` and `ll` default to `dir`'s behavior on Windows.)
+(On Windows, `ll` = `dir`, while `ls` is the short variant.)
 
 <br>
 <br>
