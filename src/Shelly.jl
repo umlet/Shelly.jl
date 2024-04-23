@@ -8,7 +8,7 @@ struct MacOS <: TraitOS end
 struct Windows <: TraitOS end
 OS::TraitOS = Sys.iswindows()  ?  Windows()  :  ( Sys.isapple()  ?  MacOS()  :  Linux() )
 
-_DEBUG::String = "000"
+_DEBUG::String = "000od"
 
 include("lscolumns.jl")
 include("ls_cd_df.jl")

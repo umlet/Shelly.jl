@@ -44,7 +44,7 @@ end
 # On Linuxy systems, we want '.' and '..' entries; we remove other hidden files ourselves
 listfilecmd(         _::Bool, _::Linux)   = `ls -l -a --group-directories-first`
 listfilecmd(         _::Bool, _::MacOS)   = `ls -l -a`
-listfilecmd(showhidden::Bool, _::Windows) = showhidden  ?  `cmd /c dir /a`  :  `cmd /c dir`
+listfilecmd(showhidden::Bool, _::Windows) = showhidden  ?  `cmd /c dir /a /o:g`  :  `cmd /c dir /o:g`
 
 function _llraw(showhidden::Bool, os::Union{Linux, MacOS})
     cmd = listfilecmd(showhidden, os)
