@@ -284,7 +284,7 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 ## Change History
 
-0.9.0 list hidden files: `lla`/`lsa`==`ls [-l] -a`, and `dira`; `ldf`, root dir handling, and group-by-dirs on Windows; capture output via pipe; code re-org
+0.9.0 list hidden files: `lla`/`lsa`==`ls [-l] -a`, and `dira` (thanks to @oheil !); `ldf`, root dir handling, and group-by-dirs on Windows; capture output via pipe; code re-org
 
 0.8.1 Export `ldf` on Mac; minor doc update
 
