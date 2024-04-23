@@ -52,14 +52,26 @@ function _llraw(showhidden::Bool, os::Union{Linux, MacOS})
     return ss
 end
 function _llraw(showhidden::Bool, os::Windows)
-    cmd = listfilecmd(showhidden, os)
-    s = read(cmd, String)
-    ss = split(s, "\r\n")
-    ss[end] == ""  &&  pop!(ss)
+    RET = let
+        cmd = listfilecmd(showhidden, os)
+        s = read(cmd, String)
+        ss = split(s, "\r\n")
+        ss[end] == ""  &&  pop!(ss)
 
-    # prefix of 5, suffix of 2 lines expected
-    length(ss) < 7  &&  error("unexpected 'dir' result; too few entries")
-    return ss[6:end-2]
+        # prefix of 5, suffix of 2 lines expected
+        length(ss) < 7  &&  error("unexpected 'dir' result; too few entries")
+        ss[6:end-2]
+    end
+
+    # special cases: root dir & seemingly odd/'.'-less folder output
+    # get '.' and '..' lines from homedir
+    if length(RET) == 0  ||  !endswith(ss[RET], " .")
+        s = read(`cmd /c dir $(homedir())`, String)
+        ss = split(s, "\r\n")
+        push!(RET, ss[6])
+        push!(RET, ss[7])
+    end
+    return RET
 end
 
 function listfiles(showhidden::Bool, os::Union{Linux, MacOS})

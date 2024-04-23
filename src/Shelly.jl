@@ -121,11 +121,13 @@ end # module
 
 #=
 TODO:
-- OS-ify listmount
-- README & version
 - top level dir on Windows does not return ".." entry
-- Windows drive letters -- use isdir insteal of deprecated wmic
-- let strings escape via pipe op (also for df?)
-- copmplete help; ps1..
-- explicit iter imports [DONE]
+- complete help; ps1..
+- README & version
+
+!todoc - let strings escape via pipe op
+
+[DONE] - explicit iter imports
+[DONE] - OS-ify listmount
+[DONE] - Windows drive letters -- use isdir insteal of deprecated wmic
 =#
