@@ -16,9 +16,9 @@
 <br>
 <br>
 
-Julia's REPL and its modes are superb. They also offer a variety of ways to interact with the underlying file system--the `cd("somedir")` function, a full-blown shell mode, macro capabilities, etc. Yet all involve just a *tiny* bit more typing of (often shifted) chars, or a mode switch.
+Julia's REPL and its modes are superb. They also offer a variety of ways to interact with the underlying file system -- the `cd("somedir")` function, a full-blown shell mode, macro capabilities, etc. Yet all involve just a *tiny* bit more typing of (often shifted) chars, or a mode switch.
 
-Shelly provides a modeless and minimal-keystroke way of navigating the file system with `cd`, `ls`, and `ll` (and `dir` on Windows). On Linux, some additional Unix shortcuts are available.
+Shelly provides a modeless and minimal-keystroke way of navigating the file system with `cd`, `ls`, and `ll`, or `dir` on Windows. (Use `lla`, `lsa`, or `dira` to also show hidden files.) On Linux, some additional Unix shortcuts are available.
 
 Shelly does not hack the REPL. Instead, it just uses `show` on custom types, and it overloads a special-case multiplication (*multiply and conquer*, if you will). Find out how it works below the examples.
 
@@ -29,7 +29,7 @@ julia> using Shelly
 ```
 *Or, to avoid name collisions, maybe just selectively `import` the ones you like:*
 ```julia
-julia> import Shelly: ll, ls, ldf, head, tail, wc, ps1, cc, °   # or any subset
+julia> import Shelly: ll, lla, ls, lsa, df, ldf, ps1, cc, °,  [Linux only->] head, tail, wc    # or any subset
 ```
 In particular, `ls` might clash with [FileJockey.jl](https://github.com/umlet/FileJockey.jl)'s `ls()` function. But you can always create your own shortcut to it with `myls = Shelly.ls`.
 
@@ -184,7 +184,7 @@ julia> 3wc
 
 
 
-### Example: `ldf` (Linux-/macOS-only)
+### Example: `ldf`
 
 We can show our mounts with  `ldf` (`df` is also available, but not exported, as it can easily clash with some DataFrame variable):
 ```
@@ -211,6 +211,16 @@ julia> -2cd
 <br>
 <br>
 
+### Pipe It!
+
+The `ll`-commands just write stuff to stdout. But your can still recover this content via the pipe operator -- this will yield a string array:
+```
+julia> ll |> collect
+```
+
+
+<br>
+<br>
 
 ### One more thing: `ps1`
 
@@ -274,7 +284,9 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 ## Change History
 
-0.8.1 export `ldf` on Mac; minor doc update
+0.9.0 list hidden files: `lla`/`lsa`==`ls [-l] -a`, and `dira`; `ldf`, root dir handling, and group-by-dirs on Windows; capture output via pipe; code re-org
+
+0.8.1 Export `ldf` on Mac; minor doc update
 
 0.8 `df` -> `ldf`
 
@@ -289,5 +301,5 @@ Shelly.jl/::julia>   # the new prompt shows the current dir now
 
 
 ## TODOs
-More Windows support (`wmic`); code cleanup; more commands (`pwd`?); `ls -a` via CONF; fix Windows issue if traversing up root; `setprompt` doc; ...
+more commands (`pwd`?) ...
 

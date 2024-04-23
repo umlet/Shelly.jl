@@ -123,13 +123,14 @@ end # module
 
 #=
 TODO:
-- top level dir on Windows does not return ".." entry
-- complete help; ps1..
-- README & version
-- iddir -> isnicedir
 
 !todoc - let strings escape via pipe op
 
+[DONE] - README & version
+[DONE] - complete help; ps1..
+[DONE] - top level dir on Windows does not return ".." entry
+[DONE] - isdir -> isnicedir
+[DONE] - group dirs first on Win
 [DONE] - explicit iter imports
 [DONE] - OS-ify listmount
 [DONE] - Windows drive letters -- use isdir insteal of deprecated wmic

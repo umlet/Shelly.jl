@@ -1,15 +1,18 @@
 
 
 """
-    ll, ls;  dir (on Windows)
+    ll/lla, ls/lsa;  dir (on Windows)
     <N>cd  or  <N>° -- examples: '3cd' or '3°'
     ldf
+    ps1
 
 `ll`,.. are shortcuts/constants that list the current dir's contents in the Julia REPL mode.
 
 `cd`, preceded by a number shown in the `ll`-ouput, changes dir, for example `4cd`. The second entry of `ll` is always the parent dir "..", so `2cd` moves one dir up (`cc` does the same). `0cd` goes to your home dir.
 
-Linuxy-only for now: `ldf` shows mounts; their negative indices can be used with `cd`, as in `-4cd`.
+`ldf` shows mounts; their negative indices can be used with `cd`, as in `-4cd`. (Import the snappier `df` if you're in-"differential" to name clashes.)
+
+`ps1` shows the current dir in the Julia prompt.
 """
-:ll, :ls, :dir, :ldf, :cc, :°, :Shelly
+:ll, :lla, :ls, :lsa, :dir, :dira, :df, :ldf, :cc, :°, :ps1, :Shelly
 

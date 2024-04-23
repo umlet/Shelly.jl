@@ -7,9 +7,13 @@ export ps1
 #export lsa -- import manually if needed; can clash
 export ll
 export lla
+
+#export df -- import manually if needed; can clash
+export ldf
+
 if Sys.iswindows()
     export dir
-    export dira  # TODO: Windows 'dir' sometimes omits . and .. entries (?)
+    export dira
 end
 
 
@@ -23,9 +27,6 @@ if !Sys.iswindows()
     export head
     export tail
     export wc
-
-    export ldf
-    #noexport df -- import manually if needed; can clash
 end
 
 
