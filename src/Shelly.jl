@@ -126,6 +126,7 @@ TODO:
 - top level dir on Windows does not return ".." entry
 - complete help; ps1..
 - README & version
+- iddir -> isnicedir
 
 !todoc - let strings escape via pipe op
 

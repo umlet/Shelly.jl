@@ -1,5 +1,11 @@
 
 
+# helper: isdir can fail with exception
+isnicedir(s) = try  isdir(s)  catch;  false  end
+
+
+
+
 let
     lastshowhidden::Bool = false
     global setlastshowhidden(x::Bool) = ( lastshowhidden = x )
@@ -90,8 +96,8 @@ function listfiles(showhidden::Bool, os::Union{Linux, MacOS})
         names = names[inds]
     end
 
-    outs_long  = [ (isdir(name) ? "$(s)   $(i)cd" : "$(s)   $(i)")    for (s, name, i) in zip(rpadmax(lines_raw_long), names, countfrom(1)) ]
-    outs_short = [ (isdir(name) ? "$(i)° $(name)" : "$(i)  $(name)")  for    (name, i) in zip(                         names, countfrom(1)) ]
+    outs_long  = [ (isnicedir(name) ? "$(s)   $(i)cd" : "$(s)   $(i)")    for (s, name, i) in zip(rpadmax(lines_raw_long), names, countfrom(1)) ]
+    outs_short = [ (isnicedir(name) ? "$(i)° $(name)" : "$(i)  $(name)")  for    (name, i) in zip(                         names, countfrom(1)) ]
     return ListfilesStruct(lines_raw_long, names, outs_long, outs_short)
 end
 function listfiles(showhidden::Bool, os::Windows)
@@ -102,8 +108,8 @@ function listfiles(showhidden::Bool, os::Windows)
         [ line2name(s, i, os) for s in lines_raw_long ]
     end
 
-    outs_long  = [ (isdir(name) ? "$(s)   $(i)cd" : "$(s)   $(i)")    for (s, name, i) in zip(rpadmax(lines_raw_long), names, countfrom(1)) ]
-    outs_short = [ (isdir(name) ? "$(i)° $(name)" : "$(i)  $(name)")  for    (name, i) in zip(                         names, countfrom(1)) ]
+    outs_long  = [ (isnicedir(name) ? "$(s)   $(i)cd" : "$(s)   $(i)")    for (s, name, i) in zip(rpadmax(lines_raw_long), names, countfrom(1)) ]
+    outs_short = [ (isnicedir(name) ? "$(i)° $(name)" : "$(i)  $(name)")  for    (name, i) in zip(                         names, countfrom(1)) ]
     return ListfilesStruct(lines_raw_long, names, outs_long, outs_short)
 end
 
@@ -153,8 +159,7 @@ function listmounts(_::Windows)
     lines_raw = String[]
     for c in 'A':'Z'
         drive = c * ':'
-        ok = try  isdir(drive)  catch;  false  end  # some internal drive letters crazily throw exception
-        !ok  &&  continue
+        !isnicedir(drive)  &&  continue
         push!(lines_raw, drive)
     end
     outs = [ "$(s)   $(-i)cd" for (s,i) in zip(lines_raw, countfrom(1)) ]
@@ -196,7 +201,7 @@ function toname(i::Int64; must_be_file=false, must_be_dir=false)
         println(stderr, "ERROR: $(i)='$(name)': mot a file")
         return nothing
     end
-    if must_be_dir  &&  !isdir(name)
+    if must_be_dir  &&  !isnicedir(name)
         println(stderr, "ERROR: $(i)='$(name)': not a dir")
         return nothing
     end
